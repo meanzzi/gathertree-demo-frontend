@@ -1,12 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-/**
- * PixelCanvas
- * - widthPx, heightPx: 실제 픽셀 캔버스 크기 (예: 32x32, 160x192)
- * - scale: 화면에서 보여줄 확대 배율
- * - initialImageDataUrl: 기존 이미지 로드 (옵션)
- * - onChange: (dataUrl) => void
- */
 export default function PixelCanvas({
   widthPx,
   heightPx,
@@ -15,7 +8,7 @@ export default function PixelCanvas({
 }) {
   const canvasRef = useRef(null);
 
-  const [color, setColor] = useState("#2f7141ff");
+  const [color, setColor] = useState("#2f7141");
   const [tool, setTool] = useState("pen"); // pen | eraser
   const [brushSize, setBrushSize] = useState(2); //  펜 굵기
   const [isDown, setIsDown] = useState(false);
@@ -23,6 +16,9 @@ export default function PixelCanvas({
 
   const cssWidth = widthPx * scale;
   const cssHeight = heightPx * scale;
+
+  // getContext 매번 호출 리팩토링
+  const ctxRef = useRef(null);
 
   /* -----------------------------
    * 캔버스 초기화 & 이미지 로드
@@ -34,22 +30,25 @@ export default function PixelCanvas({
     c.width = widthPx;
     c.height = heightPx;
 
-    const context = c.getContext("2d");
-    context.imageSmoothingEnabled = false;
-    context.clearRect(0, 0, widthPx, heightPx);
+    const ctx = c.getContext("2d", {
+      willReadFrequently: true,
+    });
+    ctx.imageSmoothingEnabled = false;
+    ctx.clearRect(0, 0, widthPx, heightPx);
+
+    ctxRef.current = ctx; // 여기서 한 번만 저장
 
     if (initialImageDataUrl) {
       const img = new Image();
       img.onload = () => {
-        context.clearRect(0, 0, widthPx, heightPx);
-        context.drawImage(img, 0, 0, widthPx, heightPx);
+        ctx.clearRect(0, 0, widthPx, heightPx);
+        ctx.drawImage(img, 0, 0, widthPx, heightPx);
         emit();
       };
       img.src = initialImageDataUrl;
     } else {
       emit();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [widthPx, heightPx, initialImageDataUrl]);
 
   /* -----------------------------
@@ -95,24 +94,12 @@ export default function PixelCanvas({
     }
   };
 
-  // 확대, 축소 함수
-  // const zoomIn = () => {
-  //   setScale((s) => Math.min(s + 2, 40));
-  // };
-
-  // const zoomOut = () => {
-  //   setScale((s) => Math.max(s - 2, 4));
-  // };
-
   /* -----------------------------
    * 브러시 드로잉 (굵기 지원)
    * ----------------------------- */
   const drawBrush = (x, y) => {
-    const c = canvasRef.current;
-    if (!c) return;
-
-    const context = c.getContext("2d");
-    context.imageSmoothingEnabled = false;
+    const ctx = ctxRef.current;
+    if (!ctx) return;
 
     const half = Math.floor(brushSize / 2);
 
@@ -124,10 +111,10 @@ export default function PixelCanvas({
         if (px < 0 || py < 0 || px >= widthPx || py >= heightPx) continue;
 
         if (tool === "eraser") {
-          context.clearRect(px, py, 1, 1);
+          ctx.clearRect(px, py, 1, 1);
         } else {
-          context.fillStyle = color;
-          context.fillRect(px, py, 1, 1);
+          ctx.fillStyle = color;
+          ctx.fillRect(px, py, 1, 1);
         }
       }
     }
@@ -159,10 +146,10 @@ export default function PixelCanvas({
    * 전체 지우기
    * ----------------------------- */
   const clearAll = () => {
-    const c = canvasRef.current;
-    if (!c) return;
-    const context = c.getContext("2d");
-    context.clearRect(0, 0, widthPx, heightPx);
+    const ctx = ctxRef.current;
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, widthPx, heightPx);
     emit();
   };
 
@@ -259,15 +246,9 @@ export default function PixelCanvas({
         />
       </div>
 
-      {/* 캔버스 확대, 축소 (임시크기) */}
-      {/* <div>
-        <button onClick={zoomOut}>−</button>
-        <button onClick={zoomIn}>+</button>
-      </div> */}
-
-      <div className="mini" style={{ marginTop: 10 }}>
+      {/* <div className="mini" style={{ marginTop: 10 }}>
         크기: {widthPx}×{heightPx}px · 화면 표시: {cssWidth}×{cssHeight}px
-      </div>
+      </div> */}
     </div>
   );
 }
