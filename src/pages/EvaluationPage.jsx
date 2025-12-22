@@ -1,4 +1,6 @@
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import axios from "axios";
 
 export default function EvaluationPage() {
   const { uuid } = useParams();
@@ -6,6 +8,17 @@ export default function EvaluationPage() {
   const navigate = useNavigate();
 
   const mode = params.get("mode") ?? "mild"; // mild | spicy
+
+  const [treeData, setTreeData] = useState(null);
+
+  // 최종 트리 불러오는게 없네..
+  useEffect(() => {
+    axios.get(`https://api.beour.store/tree/${uuid}`).then((res) => {
+      if (res.data.isSuccess) {
+        setTreeData(res.data.data);
+      }
+    });
+  }, [uuid]);
 
   // TODO: 실제 AI 응답으로 교체
   const mockResult = {
@@ -25,17 +38,30 @@ export default function EvaluationPage() {
         </h3>
 
         {/* 트리 이미지 */}
-        <div
-          className="nes-container is-rounded"
-          style={{ background: "#fff", marginBottom: 16 }}
-        >
-          <div className="mini" style={{ padding: 16 }}>
-            합성된 트리 이미지 자리
+        {treeData ? (
+          <div
+            className="nes-container is-rounded"
+            style={{ background: "#fff", marginBottom: 16 }}
+          >
+            <img
+              src={treeData.baseImageUrl}
+              alt="완성된 트리"
+              style={{ width: "100%" }}
+            />
           </div>
-        </div>
+        ) : (
+          <div
+            className="nes-container is-rounded mini"
+            style={{ background: "#fff", marginBottom: 16, padding: 16 }}
+          >
+            트리 불러오는 중...
+          </div>
+        )}
 
         {/* 점수 */}
-        <h4>총점: {mockResult.score} 점</h4>
+        <h4 style={{ marginTop: "2rem", marginBottom: "1.3rem" }}>
+          총점: {mockResult.score} 점
+        </h4>
 
         {/* 평가 코멘트 */}
         <div
@@ -46,8 +72,14 @@ export default function EvaluationPage() {
         </div>
 
         {/* 버튼 */}
-        <div className="btn-row">
-          <button className="nes-btn is-success">이미지 다운로드</button>
+        <div
+          className="btn-row"
+          style={{
+            marginTop: "2rem",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <button className="nes-btn" onClick={() => navigate(`/tree/${uuid}`)}>
             트리로 돌아가기
           </button>

@@ -152,25 +152,26 @@ export default function TreeViewPage() {
             장식 요청 링크
           </button>
 
-          <button
+          {/* 버그로 잠시 주석처리할게요.. */}
+          {/* <button
             className="nes-btn"
             onClick={() => navigate(`/tree/${uuid}/edit`)}
           >
             트리 수정하기
-          </button>
-
-          <button className="nes-btn is-success" onClick={download}>
-            이미지 다운로드
-          </button>
+          </button> */}
 
           <button
-            className="nes-btn is-primary"
+            className="nes-btn"
             onClick={() => {
               setInviteType("owner");
               setShowInvite(true);
             }}
           >
             내 트리 링크 저장
+          </button>
+
+          <button className="nes-btn is-success" onClick={download}>
+            이미지 다운로드
           </button>
         </div>
 

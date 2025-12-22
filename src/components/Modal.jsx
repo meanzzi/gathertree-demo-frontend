@@ -13,7 +13,7 @@ export default function Modal({ title, children, onClose }) {
       <section
         className="nes-dialog is-rounded"
         style={{
-          backgroundColor: "#468f6aff",
+          backgroundColor: "#468365f3",
         }}
       >
         <header

@@ -108,21 +108,32 @@ export default function DecorationPage() {
           />
         </div>
 
-        <div className="btn-row">
+        {isMaxDecorations && (
+          <div
+            style={{
+              color: "red",
+              marginTop: 8,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            장식은 최대 10개까지 가능합니다.
+          </div>
+        )}
+        <div
+          className="btn-row"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
           <button
             className={`nes-btn is-primary ${
               isMaxDecorations ? "is-disabled" : ""
             }`}
             onClick={handleSubmit}
             disabled={isMaxDecorations}
+            style={{ fontWeight: 600 }}
           >
             장식 제출하기
           </button>
-          {isMaxDecorations && (
-            <p className="mini" style={{ color: "red", marginTop: 8 }}>
-              장식은 최대 10개까지 가능합니다.
-            </p>
-          )}
         </div>
       </section>
     </div>

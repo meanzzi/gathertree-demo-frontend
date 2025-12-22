@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import PixelCanvas from "../components/PixelCanvas";
 import Modal from "../components/Modal";
 import axios from "axios"; // 소규모 프로젝트라서 그냥 axios만 사용
@@ -55,11 +55,24 @@ export default function TreeDrawPage() {
           />
         </div>
 
-        <div className="btn-row">
-          <button className="nes-btn is-success" onClick={handleSave}>
+        <div
+          className="btn-row"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <button
+            className="nes-btn is-success"
+            onClick={handleSave}
+            style={{
+              fontWeight: 600,
+            }}
+          >
             트리 저장하기
           </button>
-          <button className="nes-btn" onClick={() => navigate("/")}>
+          <button
+            className="nes-btn"
+            onClick={() => navigate("/")}
+            style={{ fontWeight: 600 }}
+          >
             취소
           </button>
         </div>

@@ -9,10 +9,10 @@
 }
 
 :root {
-  --bg: #133b27; /* 다크 그린 */
-  --panel: #f6f1e8; /* 크림 */
-  --accent: #d62c2c; /* 레드 */
-  --gold: #f2c94c; /* 골드 */
+  --bg: #133b27;
+  --panel: #f6f1e8;
+  --accent: #d62c2c;
+  --gold: #f2c94c;
 }
 
 * {

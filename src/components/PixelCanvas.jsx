@@ -147,13 +147,34 @@ export default function PixelCanvas({
   };
 
   return (
-    <div style={{ marginBottom: "2rem" }}>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        marginBottom: "2rem",
+      }}
+    >
       {/*  툴바 */}
-      <div className="btn-row" style={{ alignItems: "center" }}>
+      <div
+        className="btn-row"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexWrap: "wrap", // 화면 작아지면 자연스럽게 다음 줄로
+          gap: "1rem",
+          marginBottom: "1.3rem",
+          padding: "0 10px",
+        }}
+      >
         <button
           className={`nes-btn ${tool === "pen" ? "is-primary" : ""}`}
           onClick={() => setTool("pen")}
           type="button"
+          style={{
+            fontWeight: 600,
+          }}
         >
           펜
         </button>
@@ -162,44 +183,83 @@ export default function PixelCanvas({
           className={`nes-btn ${tool === "eraser" ? "is-warning" : ""}`}
           onClick={() => setTool("eraser")}
           type="button"
+          style={{ fontWeight: 600 }}
         >
           지우개
         </button>
 
         {/*  펜 굵기 */}
         <label
-          className="mini"
-          style={{ display: "flex", alignItems: "center", gap: 8 }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 9,
+            whiteSpace: "nowrap",
+          }}
         >
-          굵기
-          <select
-            className="nes-select"
-            value={brushSize}
-            onChange={(e) => setBrushSize(Number(e.target.value))}
-          >
-            <option value={1}>1px</option>
-            <option value={2}>2px</option>
-            <option value={3}>3px</option>
-            <option value={4}>4px</option>
-            <option value={5}>5px</option>
-          </select>
+          <span style={{ fontSize: "1.1rem", fontWeight: 600 }}>굵기</span>
+          <div className="nes-select" style={{ width: "7rem" }}>
+            <select
+              value={brushSize}
+              onChange={(e) => setBrushSize(Number(e.target.value))}
+            >
+              <option value={1} style={{ fontSize: "0.8rem" }}>
+                1px
+              </option>
+              <option value={2} style={{ fontSize: "0.8rem" }}>
+                2px
+              </option>
+              <option value={3} style={{ fontSize: "0.8rem" }}>
+                3px
+              </option>
+              <option value={4} style={{ fontSize: "0.8rem" }}>
+                4px
+              </option>
+              <option value={5} style={{ fontSize: "0.8rem" }}>
+                5px
+              </option>
+            </select>
+          </div>
         </label>
 
         {/* 색상 */}
-        <label
-          className="mini"
-          style={{ display: "flex", alignItems: "center", gap: 8 }}
-        >
-          색상
-          <input
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            style={{ width: 44, height: 34 }}
-          />
+        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: "1.1rem", fontWeight: 600 }}>색상</span>
+          <div
+            className="nes-container is-rounded"
+            style={{
+              width: "60px",
+              height: "48px",
+              padding: 0,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#fff",
+            }}
+          >
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              style={{
+                width: "100%",
+                height: "100%",
+                cursor: "pointer",
+                border: "none",
+                outline: "none",
+                padding: 0,
+                background: "none",
+              }}
+            />
+          </div>
         </label>
 
-        <button className="nes-btn is-error" onClick={clearAll} type="button">
+        <button
+          className="nes-btn is-error"
+          onClick={clearAll}
+          type="button"
+          style={{ fontWeight: 600 }}
+        >
           전체 지우기
         </button>
       </div>
@@ -208,20 +268,22 @@ export default function PixelCanvas({
         className="nes-container is-rounded"
         style={{
           background: "#fff",
-          padding: 12,
-          marginTop: 12,
           display: "inline-block",
-          maxWidth: "100%",
+          width: "97%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "1rem",
+          aspectRatio: `${widthPx} / ${heightPx}`,
         }}
       >
         <canvas
           ref={canvasRef}
           className="canvas-transparent"
           style={{
-            height: heightPx * 5,
-            maxWidth: "100%",
             width: "100%",
-            border: "2px solid #111",
+            height: "100%",
+            outline: "2px solid #111",
             imageRendering: "pixelated",
             cursor: tool === "eraser" ? "not-allowed" : "crosshair",
             touchAction: "none",
