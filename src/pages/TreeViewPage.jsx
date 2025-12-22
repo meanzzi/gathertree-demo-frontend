@@ -148,6 +148,7 @@ export default function TreeViewPage() {
           <button
             className="nes-btn is-warning"
             onClick={() => setShowInvite(true)}
+            style={{ fontWeight: 600 }}
           >
             장식 요청 링크
           </button>
@@ -166,18 +167,23 @@ export default function TreeViewPage() {
               setInviteType("owner");
               setShowInvite(true);
             }}
+            style={{ fontWeight: 600 }}
           >
             내 트리 링크 저장
           </button>
 
-          <button className="nes-btn is-success" onClick={download}>
+          <button
+            className="nes-btn is-success"
+            onClick={download}
+            style={{ fontWeight: 600 }}
+          >
             이미지 다운로드
           </button>
         </div>
 
         <hr />
 
-        <p style={{ fontSize: "12px", paddingTop: "3px" }}>
+        <p style={{ fontSize: "1rem", paddingTop: "3px" }}>
           {canEvaluate
             ? "AI 평가 받기"
             : "트리를 완성하면 AI에게 평가받을 수 있어요."}
@@ -193,6 +199,7 @@ export default function TreeViewPage() {
               if (!canEvaluate) return;
               navigate(`/tree/${uuid}/evaluate?mode=mild`);
             }}
+            style={{ fontWeight: 600 }}
           >
             GPF 순한맛 평가
           </button>
@@ -203,6 +210,7 @@ export default function TreeViewPage() {
               if (!canEvaluate) return;
               navigate(`/tree/${uuid}/evaluate?mode=spicy`);
             }}
+            style={{ fontWeight: 600 }}
           >
             GPT 매운맛 평가
           </button>
@@ -217,7 +225,7 @@ export default function TreeViewPage() {
         <h3 style={{ marginTop: 0 }}>장식 목록</h3>
 
         {decorations.length === 0 ? (
-          <p style={{ fontSize: "12px" }}>
+          <p style={{ fontSize: "1rem" }}>
             아직 장식이 없어요. 친구에게 장식을 그려달라고 요청하세요!
           </p>
         ) : (

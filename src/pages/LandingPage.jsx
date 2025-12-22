@@ -34,13 +34,7 @@ export default function LandingPage() {
             className="nes-btn is-primary"
             onClick={() => navigate("/tree/new")}
           >
-            <div
-              style={{
-                fontWeight: 600,
-              }}
-            >
-              트리 만들기
-            </div>
+            <div style={{ fontWeight: 600 }}>트리 만들기</div>
           </button>
         </div>
       </section>
