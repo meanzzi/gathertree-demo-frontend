@@ -125,31 +125,33 @@ export default function TreeViewPage() {
     if (!finalPng) return alert("이미지가 아직 준비되지 않았습니다.");
 
     try {
-      const key = `eval/tmp/${uuid}-${Date.now()}.png`; // 같은 트리 여러 번 평가 시 덮어쓰기 방지
+      const key = `eval/tmp/${uuid}.png`;
       const response = await axios.post(
         "https://api.beour.store/s3/presigned-url",
-        { key: key }
+        { key }
       );
-
-      const { uploadUrl, publicUrl } = response.data.data;
-
-      if (!uploadUrl) {
-        throw new Error("업로드 URL을 받아오지 못했습니다.");
-      }
+      const { uploadUrl } = response.data.data;
 
       const imageBlob = dataURLtoBlob(finalPng);
+
+      //S3 업로드 실행
       await axios.put(uploadUrl, imageBlob, {
         headers: { "Content-Type": "image/png" },
       });
-      console.log(publicUrl);
 
+      // 업로드 성공 확인용 로컬 URL 생성
+      const previewUrl = URL.createObjectURL(imageBlob);
+
+      // Key와 로컬 이미지 주소를 같이 보냄
       navigate(`/tree/${uuid}/evaluate?mode=${mode}`, {
-        state: { finalImageUrl: publicUrl },
+        state: {
+          imageKey: key,
+          previewUrl: previewUrl, // 확인용 이미지
+        },
       });
-      console.log(publicUrl);
     } catch (err) {
-      console.error("에러 발생 상세:", err);
-      alert("이미지 처리 중 오류가 발생했습니다.");
+      console.error(err);
+      alert("이미지 업로드 실패!");
     }
   };
 
