@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/GatherTree.png";
-import Tree from "../assets/Tree.png";
+import Tree from "../assets/tree.png";
 
 export default function LandingPage() {
   const navigate = useNavigate();
