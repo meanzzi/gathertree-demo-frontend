@@ -160,7 +160,7 @@ export default function TreeViewPage() {
       <div className="app-shell">
         <section className="nes-container is-rounded panel">
           <h3 style={{ marginTop: 0 }}>트리를 찾을 수 없어요</h3>
-          <p className="mini">저장된 트리 링크가 맞는지 확인해주세요.</p>
+          <p>저장된 트리 링크가 맞는지 확인해주세요.</p>
           <div className="btn-row">
             <button className="nes-btn" onClick={() => navigate("/")}>
               홈으로

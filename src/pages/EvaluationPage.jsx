@@ -35,26 +35,25 @@ export default function EvaluationPage() {
           imageKey: imageKey,
         };
 
-        console.log("서버로 보내는 데이터:", requestBody);
-
         const response = await axios.post(
           `https://api.beour.store/tree/${uuid}/evaluate?mode=${mode}`,
           requestBody
         );
 
+        // 선착순 안에 못들어가면 ai 닫혀요 ~
         if (response.data.isSuccess) {
           setEvaluation(response.data.data);
         } else {
-          // 장식 부족이나 선착순 초과 시
-          alert(response.data.message);
+          alert(
+            "AI 평가 참여가 마감되었습니다. 트리를 함께 만들어주셔서 감사합니다."
+          );
           navigate(`/tree/${uuid}`);
         }
       } catch (err) {
-        // 400 에러 시 서버가 주는 상세 메시지 확인
-        console.error("AI 연동 에러 상세:", err.response?.data);
-
-        const errorMsg = err.response?.data?.message || "잘못된 요청입니다.";
-        alert(`평가 실패: ${errorMsg}`);
+        alert(
+          "AI 평가 참여가 마감되었습니다. 트리를 함께 만들어주셔서 감사합니다."
+        );
+        navigate(`/tree/${uuid}`);
       } finally {
         setLoading(false);
       }
@@ -83,10 +82,10 @@ export default function EvaluationPage() {
   return (
     <div className="app-shell">
       <section className="nes-container is-rounded panel">
-        <h3 style={{ marginTop: 0, marginBottom: "2rem" }}>
+        <h2 style={{ marginTop: 0, marginBottom: "2rem" }}>
           {evaluation?.title ||
             `평가 결과 (${mode === "mild" ? "순한맛" : "매운맛"})`}
-        </h3>
+        </h2>
 
         {/* 트리 이미지 */}
         <div
@@ -119,7 +118,9 @@ export default function EvaluationPage() {
           className="nes-container with-title is-rounded"
           style={{ background: "#fff", textAlign: "left" }}
         >
-          <p className="title">상세 분석</p>
+          <p className="title" style={{ fontWeight: 700 }}>
+            상세 분석
+          </p>
           <ul className="nes-list is-disc" style={{ paddingLeft: "20px" }}>
             {evaluation?.comments?.map((comment, idx) => (
               <li key={idx} style={{ marginBottom: "8px", fontSize: "0.9rem" }}>
@@ -138,7 +139,11 @@ export default function EvaluationPage() {
             justifyContent: "center",
           }}
         >
-          <button className="nes-btn" onClick={() => navigate(`/tree/${uuid}`)}>
+          <button
+            className="nes-btn"
+            onClick={() => navigate(`/tree/${uuid}`)}
+            style={{ fontWeight: 700 }}
+          >
             트리로 돌아가기
           </button>
         </div>
